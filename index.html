@@ -417,6 +417,13 @@
                 info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
                 div.appendChild(info);
 
+                if (r.prize) {
+                    var prize = document.createElement('div');
+                    prize.className = 'prize-info';
+                    prize.innerHTML = '1등 ' + r.prize + (r.winners ? '<span class="winners">(' + r.winners + '명)</span>' : '');
+                    div.appendChild(prize);
+                }
+
                 var balls = document.createElement('div');
                 balls.className = 'lotto-balls';
                 r.numbers.forEach(function(num) {
@@ -444,6 +451,11 @@
                 info.className = 'round-info';
                 info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
                 div.appendChild(info);
+
+                var pensionPrize = document.createElement('div');
+                pensionPrize.className = 'pension-prize';
+                pensionPrize.textContent = '1등 월 700만원 × 20년';
+                div.appendChild(pensionPrize);
 
                 var result = document.createElement('div');
                 result.className = 'pension-result';

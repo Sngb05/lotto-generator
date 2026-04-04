@@ -471,6 +471,27 @@ body {
     font-weight: 500;
 }
 
+.winning-round .prize-info {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #D4A843;
+    margin-bottom: 12px;
+}
+
+.winning-round .prize-info .winners {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #999;
+    margin-left: 6px;
+}
+
+.winning-round .pension-prize {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #B8942E;
+    margin-bottom: 12px;
+}
+
 .winning-round .lotto-balls {
     gap: 5px;
     min-height: auto;

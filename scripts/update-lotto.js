@@ -24,14 +24,12 @@ async function fetchLottoFromSuperkts() {
     console.log('superkts.com에서 로또 데이터 수집 중...');
     var html = await fetch('https://superkts.com/lotto/list/');
 
-    // 테이블 행에서 당첨번호 추출
-    // 패턴: <td>회차</td><td><span>번호1</span></td>...<td><span>보너스</span></td>
     var rowRegex = /<tr><td>(\d+)<\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td><td><span[^>]*>(\d+)<\/span><\/td>/g;
 
-    var results = [];
+    var rounds = [];
     var match;
 
-    while ((match = rowRegex.exec(html)) !== null && results.length < 3) {
+    while ((match = rowRegex.exec(html)) !== null && rounds.length < 3) {
         var round = parseInt(match[1]);
         var numbers = [
             parseInt(match[2]), parseInt(match[3]), parseInt(match[4]),
@@ -39,20 +37,34 @@ async function fetchLottoFromSuperkts() {
         ].sort(function(a, b) { return a - b; });
         var bonus = parseInt(match[8]);
 
-        // 추첨일 계산: 1회차 = 2002-12-07, 이후 매주 토요일
         var firstDraw = new Date('2002-12-07');
         var drawDate = new Date(firstDraw.getTime() + (round - 1) * 7 * 24 * 60 * 60 * 1000);
         var dateStr = drawDate.toISOString().split('T')[0];
 
-        results.push({
-            round: round,
-            date: dateStr,
-            numbers: numbers,
-            bonus: bonus
-        });
+        rounds.push({ round: round, date: dateStr, numbers: numbers, bonus: bonus });
     }
 
-    return results;
+    // 각 회차별 상세 페이지에서 1등 당첨금 가져오기
+    for (var i = 0; i < rounds.length; i++) {
+        try {
+            var detailHtml = await fetch('https://superkts.com/lotto/' + rounds[i].round);
+            var prizeMatch = detailHtml.match(/게임당 : <b>(\d+억[\s\d만]*원)/);
+            if (prizeMatch) {
+                rounds[i].prize = prizeMatch[1].replace(/\s+/g, ' ').trim();
+            }
+            var winnersMatch = detailHtml.match(/1등 당첨자는\s*(\d+)명/);
+            if (!winnersMatch) {
+                winnersMatch = detailHtml.match(/(\d+)명[\s\S]*?게임당/);
+            }
+            if (winnersMatch) {
+                rounds[i].winners = parseInt(winnersMatch[1]);
+            }
+        } catch (e) {
+            console.error('  ' + rounds[i].round + '회 당첨금 조회 실패');
+        }
+    }
+
+    return rounds;
 }
 
 // ── pyony.com에서 연금복권 당첨번호 파싱 ──
