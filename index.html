@@ -420,9 +420,9 @@
                 if (r.prize) {
                     var prize = document.createElement('div');
                     prize.className = 'prize-info';
-                    prize.innerHTML = '1등 ' + r.prize + (r.winners ? '<span class="winners">(' + r.winners + '명)</span>' : '');
+                    prize.innerHTML = '1등 6개 일치 — ' + r.prize + (r.winners ? '<span class="winners">(' + r.winners + '명)</span>' : '');
                     if (r.prize2) {
-                        prize.innerHTML += '<br>2등 ' + r.prize2 + (r.winners2 ? '<span class="winners">(' + r.winners2 + '명)</span>' : '');
+                        prize.innerHTML += '<br>2등 5개+보너스 일치 — ' + r.prize2 + (r.winners2 ? '<span class="winners">(' + r.winners2 + '명)</span>' : '');
                     }
                     div.appendChild(prize);
                 }
@@ -457,7 +457,15 @@
 
                 var pensionPrize = document.createElement('div');
                 pensionPrize.className = 'pension-prize';
-                pensionPrize.innerHTML = '1등 월 700만원×20년 · 2등 월 100만원×10년<br>3등 100만원 · 4등 10만원 · 5등 5만원 · 6등 5천원 · 7등 1천원<br>보너스 월 100만원×10년';
+                pensionPrize.innerHTML = ''
+                    + '1등 조+6자리 일치 — 월 700만원×20년<br>'
+                    + '2등 6자리 일치 — 월 100만원×10년<br>'
+                    + '3등 앞/뒤 5자리 일치 — 100만원<br>'
+                    + '4등 앞/뒤 4자리 일치 — 10만원<br>'
+                    + '5등 앞/뒤 3자리 일치 — 5만원<br>'
+                    + '6등 앞/뒤 2자리 일치 — 5천원<br>'
+                    + '7등 앞/뒤 1자리 일치 — 1천원<br>'
+                    + '보너스 각 조 6자리 일치 — 월 100만원×10년';
                 div.appendChild(pensionPrize);
 
                 var result = document.createElement('div');
