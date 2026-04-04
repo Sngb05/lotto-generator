@@ -57,6 +57,7 @@
                 <span class="section-title">번호 생성</span>
                 <span class="draw-day">매주 토요일 오후 8:35 추첨</span>
             </div>
+            <div class="countdown" id="lotto-countdown"></div>
             <div class="section-divider"></div>
 
             <div class="game-count">
@@ -105,6 +106,7 @@
                 <span class="section-title">번호 생성</span>
                 <span class="draw-day">매주 목요일 오후 7:05 추첨</span>
             </div>
+            <div class="countdown" id="pension-countdown"></div>
             <div class="section-divider"></div>
 
             <div class="game-count">
@@ -505,6 +507,72 @@
         }
 
         loadWinningNumbers();
+
+        // ── 구매 마감 카운트다운 ──
+        // 로또: 매주 토요일 오후 8시 마감, 연금복권: 매주 목요일 오후 7시 마감 (추첨 전 판매 마감)
+        function getNextDeadline(dayOfWeek, hour) {
+            var now = new Date();
+            var target = new Date(now);
+            target.setHours(hour, 0, 0, 0);
+
+            // 이번 주 해당 요일로 설정
+            var diff = dayOfWeek - now.getDay();
+            if (diff < 0) diff += 7;
+            target.setDate(target.getDate() + diff);
+
+            // 이미 지났으면 다음 주
+            if (target <= now) {
+                target.setDate(target.getDate() + 7);
+            }
+
+            return target;
+        }
+
+        function formatCountdown(ms) {
+            var totalSec = Math.floor(ms / 1000);
+            var days = Math.floor(totalSec / 86400);
+            var hours = Math.floor((totalSec % 86400) / 3600);
+            var mins = Math.floor((totalSec % 3600) / 60);
+            var secs = totalSec % 60;
+
+            var parts = [];
+            if (days > 0) parts.push(days + '일');
+            parts.push(hours + '시간');
+            parts.push(mins + '분');
+            parts.push(secs + '초');
+            return parts.join(' ');
+        }
+
+        function updateCountdowns() {
+            var now = new Date();
+
+            // 로또: 토요일(6) 오후 8시 마감
+            var lottoEl = document.getElementById('lotto-countdown');
+            var lottoDeadline = getNextDeadline(6, 20);
+            var lottoRemain = lottoDeadline - now;
+            if (lottoRemain > 0) {
+                lottoEl.textContent = '구매 마감까지 ' + formatCountdown(lottoRemain);
+                lottoEl.className = 'countdown';
+            } else {
+                lottoEl.textContent = '이번 주 판매가 마감되었습니다';
+                lottoEl.className = 'countdown closed';
+            }
+
+            // 연금복권: 목요일(4) 오후 7시 마감
+            var pensionEl = document.getElementById('pension-countdown');
+            var pensionDeadline = getNextDeadline(4, 19);
+            var pensionRemain = pensionDeadline - now;
+            if (pensionRemain > 0) {
+                pensionEl.textContent = '구매 마감까지 ' + formatCountdown(pensionRemain);
+                pensionEl.className = 'countdown';
+            } else {
+                pensionEl.textContent = '이번 주 판매가 마감되었습니다';
+                pensionEl.className = 'countdown closed';
+            }
+        }
+
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
     </script>
 </body>
 </html>

@@ -216,6 +216,23 @@ body {
     font-weight: 500;
 }
 
+/* ── 마감 카운트다운 ── */
+.countdown {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #D4443B;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: #FDF2F1;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.countdown.closed {
+    color: #999;
+    background: #F0EFF3;
+}
+
 .section-divider {
     height: 1px;
     background: #D5D4D8;
