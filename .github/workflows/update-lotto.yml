@@ -22,7 +22,19 @@ jobs:
           node-version: '20'
 
       - name: 당첨번호 수집 스크립트 실행
+        id: collect
         run: node scripts/update-lotto.js
+        continue-on-error: true
+
+      - name: 파싱 실패 시 Issue 생성
+        if: steps.collect.outcome == 'failure'
+        run: |
+          gh issue create \
+            --title "⚠️ 당첨번호 자동 수집 실패 ($(date +%Y-%m-%d))" \
+            --body "당첨번호 수집 스크립트가 실패했습니다. 소스 사이트(superkts.com, pyony.com)의 구조가 변경되었을 수 있습니다. 파서를 확인해주세요." \
+            --label "bug" || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 변경사항 확인 및 커밋
         run: |

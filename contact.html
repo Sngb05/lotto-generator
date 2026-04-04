@@ -9,7 +9,7 @@
     <meta property="og:description" content="로또 & 연금복권 추첨기에 대한 문의사항을 보내주세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.plasmalotto.com/contact.html">
-    <meta property="og:image" content="https://www.plasmalotto.com/og-image.svg">
+    <meta property="og:image" content="https://www.plasmalotto.com/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="문의 — 로또 & 연금복권 추첨기">
     <meta name="twitter:description" content="로또 & 연금복권 추첨기에 대한 문의사항을 보내주세요.">
@@ -91,10 +91,13 @@
     </footer>
 
     <script>
-        // 전송 성공 시 메시지 표시
         if (window.location.search.indexOf('sent=1') !== -1) {
-            document.getElementById('form-result').textContent = '문의가 정상적으로 전송되었습니다. 감사합니다!';
-            document.getElementById('form-result').style.color = '#2D6B2D';
+            var form = document.getElementById('contact-form');
+            form.innerHTML = '<div style="text-align:center;padding:32px 0;">'
+                + '<div style="font-size:2rem;margin-bottom:12px;">&#10003;</div>'
+                + '<p style="font-size:1.05rem;font-weight:700;color:#2D6B2D;margin-bottom:8px;">문의가 전송되었습니다</p>'
+                + '<p style="font-size:0.85rem;color:#888;">영업일 기준 1~3일 내로 회신드리겠습니다.</p>'
+                + '</div>';
         }
     </script>
 </body>
