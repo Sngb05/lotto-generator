@@ -486,10 +486,15 @@ body {
 }
 
 .winning-round .pension-prize {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #B8942E;
+    font-size: 0.73rem;
+    font-weight: 500;
+    color: #998540;
     margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+.winning-round .prize-info {
+    line-height: 1.7;
 }
 
 .winning-round .lotto-balls {

@@ -12,7 +12,9 @@
         ],
         "bonus": 25,
         "prize": "17억 1448만 2042원",
-        "winners": 18
+        "prize2": "6429만 3077원",
+        "winners": 18,
+        "winners2": 18
     },
     {
         "round": 1217,
@@ -27,7 +29,9 @@
         ],
         "bonus": 41,
         "prize": "21억 7973만 8018원",
-        "winners": 14
+        "prize2": "5983만 5946원",
+        "winners": 14,
+        "winners2": 14
     },
     {
         "round": 1216,
@@ -42,6 +46,8 @@
         ],
         "bonus": 25,
         "prize": "21억 4865만 4000원",
-        "winners": 14
+        "prize2": "5762만 6736원",
+        "winners": 14,
+        "winners2": 14
     }
 ]

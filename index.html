@@ -421,6 +421,9 @@
                     var prize = document.createElement('div');
                     prize.className = 'prize-info';
                     prize.innerHTML = '1등 ' + r.prize + (r.winners ? '<span class="winners">(' + r.winners + '명)</span>' : '');
+                    if (r.prize2) {
+                        prize.innerHTML += '<br>2등 ' + r.prize2 + (r.winners2 ? '<span class="winners">(' + r.winners2 + '명)</span>' : '');
+                    }
                     div.appendChild(prize);
                 }
 
@@ -454,7 +457,7 @@
 
                 var pensionPrize = document.createElement('div');
                 pensionPrize.className = 'pension-prize';
-                pensionPrize.textContent = '1등 월 700만원 × 20년';
+                pensionPrize.innerHTML = '1등 월 700만원×20년 · 2등 월 100만원×10년<br>3등 100만원 · 4등 10만원 · 5등 5만원 · 6등 5천원 · 7등 1천원<br>보너스 월 100만원×10년';
                 div.appendChild(pensionPrize);
 
                 var result = document.createElement('div');

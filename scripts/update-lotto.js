@@ -44,21 +44,35 @@ async function fetchLottoFromSuperkts() {
         rounds.push({ round: round, date: dateStr, numbers: numbers, bonus: bonus });
     }
 
-    // 각 회차별 상세 페이지에서 1등 당첨금 가져오기
+    // 각 회차별 상세 페이지에서 1등/2등 당첨금 가져오기
     for (var i = 0; i < rounds.length; i++) {
         try {
             var detailHtml = await fetch('https://superkts.com/lotto/' + rounds[i].round);
-            var prizeMatch = detailHtml.match(/게임당 : <b>(\d+억[\s\d만]*원)/);
-            if (prizeMatch) {
-                rounds[i].prize = prizeMatch[1].replace(/\s+/g, ' ').trim();
+
+            // 1등 당첨금 (한글 표기)
+            var prizes = detailHtml.match(/게임당 : <b>(\d+억[\s\d만]*원)/g);
+            if (prizes && prizes.length >= 1) {
+                var p1 = prizes[0].match(/게임당 : <b>(.+)/);
+                if (p1) rounds[i].prize = p1[1].replace(/\s+/g, ' ').trim();
             }
-            var winnersMatch = detailHtml.match(/1등 당첨자는\s*(\d+)명/);
-            if (!winnersMatch) {
-                winnersMatch = detailHtml.match(/(\d+)명[\s\S]*?게임당/);
+
+            // 2등 당첨금 (한글 표기)
+            if (prizes && prizes.length >= 2) {
+                var p2 = prizes[1].match(/게임당 : <b>(.+)/);
+                if (p2) rounds[i].prize2 = p2[1].replace(/\s+/g, ' ').trim();
+            } else {
+                // 2등이 억 단위가 아닌 경우 (만원 단위)
+                var prize2Alt = detailHtml.match(/2등 당첨금[\s\S]*?게임당 : <b>(\d+만[\s\d]*원)/);
+                if (prize2Alt) rounds[i].prize2 = prize2Alt[1].replace(/\s+/g, ' ').trim();
             }
-            if (winnersMatch) {
-                rounds[i].winners = parseInt(winnersMatch[1]);
-            }
+
+            // 1등 당첨자 수
+            var winnersMatch = detailHtml.match(/1등[\s\S]*?당첨 게임수 : <b>(\d+)/);
+            if (winnersMatch) rounds[i].winners = parseInt(winnersMatch[1]);
+
+            // 2등 당첨자 수
+            var winners2Match = detailHtml.match(/2등[\s\S]*?당첨 게임수 : <b>(\d+)/);
+            if (winners2Match) rounds[i].winners2 = parseInt(winners2Match[1]);
         } catch (e) {
             console.error('  ' + rounds[i].round + '회 당첨금 조회 실패');
         }
