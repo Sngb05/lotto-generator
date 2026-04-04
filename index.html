@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 & 연금복권 추첨기 — 번호 생성기</title>
+    <meta name="description" content="로또 6/45, 연금복권 720+ 번호를 무료로 랜덤 생성하세요. 최근 당첨번호 확인도 한 번에.">
+    <meta name="keywords" content="로또, 로또 번호 생성기, 연금복권, 연금복권 720+, 로또 추첨, 번호 추출기">
+    <meta property="og:title" content="로또 & 연금복권 추첨기">
+    <meta property="og:description" content="로또 6/45, 연금복권 720+ 번호를 무료로 랜덤 생성하세요.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="top-header">
+        <span>로또 & 연금복권 추첨기</span>
+        <span>Random Generator</span>
+        <span>2026</span>
+    </div>
+    <div class="header-line"></div>
+
+    <nav class="nav">
+        <a href="index.html" class="active">번호 생성</a>
+        <a href="about.html">소개</a>
+        <a href="privacy.html">개인정보처리방침</a>
+        <a href="contact.html">문의</a>
+    </nav>
+
+    <h1 class="site-title">로또 & 연금복권<br>랜덤번호 생성기</h1>
+
+    <!-- 스크린리더 알림 -->
+    <span id="sr-status" class="sr-only" aria-live="polite"></span>
+
+    <div class="tabs" role="tablist">
+        <button class="tab active" role="tab" id="tab-lotto" tabindex="0" aria-selected="true" aria-controls="panel-lotto">로또 6/45</button>
+        <button class="tab" role="tab" id="tab-pension" tabindex="-1" aria-selected="false" aria-controls="panel-pension">연금복권 720+</button>
+    </div>
+
+    <!-- 로또 6/45 -->
+    <div id="panel-lotto" class="panel" role="tabpanel" aria-labelledby="tab-lotto">
+        <!-- 최근 당첨번호 -->
+        <div class="winning-section">
+            <div class="section-header">
+                <span class="section-title">최근 당첨번호</span>
+                <span class="draw-day" id="lotto-update-info"></span>
+            </div>
+            <div class="section-divider"></div>
+            <div id="lotto-winning"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">번호 생성</span>
+                <span class="draw-day">매주 토요일 오후 8:35 추첨</span>
+            </div>
+            <div class="section-divider"></div>
+
+            <div class="game-count">
+                <label for="lotto-count">게임 수</label>
+                <select id="lotto-count" onchange="updatePriceHint('lotto')">
+                    <option value="1">1게임</option>
+                    <option value="2">2게임</option>
+                    <option value="3">3게임</option>
+                    <option value="4">4게임</option>
+                    <option value="5" selected>5게임</option>
+                </select>
+                <span class="price-hint" id="lotto-price">총 5,000원</span>
+            </div>
+
+            <div id="lotto-results" class="results-card"></div>
+
+            <div class="btn-area">
+                <button class="generate-btn" onclick="generate('lotto')">번호 생성</button>
+            </div>
+        </div>
+
+        <div class="history-section" id="lotto-history-section" style="display:none;">
+            <div class="section-divider"></div>
+            <div class="history-header">
+                <h3>이번 세션 기록</h3>
+                <button class="clear-btn" onclick="clearHistory('lotto')">전체 삭제</button>
+            </div>
+            <div id="lotto-history"></div>
+        </div>
+    </div>
+
+    <!-- 연금복권 720+ -->
+    <div id="panel-pension" class="panel" role="tabpanel" aria-labelledby="tab-pension" hidden>
+        <!-- 최근 당첨번호 -->
+        <div class="winning-section">
+            <div class="section-header">
+                <span class="section-title">최근 당첨번호</span>
+                <span class="draw-day" id="pension-update-info"></span>
+            </div>
+            <div class="section-divider"></div>
+            <div id="pension-winning"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">번호 생성</span>
+                <span class="draw-day">매주 목요일 오후 7:05 추첨</span>
+            </div>
+            <div class="section-divider"></div>
+
+            <div class="game-count">
+                <label for="pension-count">게임 수</label>
+                <select id="pension-count" onchange="updatePriceHint('pension')">
+                    <option value="1">1게임</option>
+                    <option value="2">2게임</option>
+                    <option value="3">3게임</option>
+                    <option value="4">4게임</option>
+                    <option value="5" selected>5게임</option>
+                </select>
+                <span class="price-hint" id="pension-price">총 5,000원</span>
+            </div>
+
+            <div id="pension-results" class="results-card"></div>
+
+            <div class="btn-area">
+                <button class="generate-btn" onclick="generate('pension')">번호 생성</button>
+            </div>
+        </div>
+
+        <div class="history-section" id="pension-history-section" style="display:none;">
+            <div class="section-divider"></div>
+            <div class="history-header">
+                <h3>이번 세션 기록</h3>
+                <button class="clear-btn" onclick="clearHistory('pension')">전체 삭제</button>
+            </div>
+            <div id="pension-history"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="about.html">소개</a>
+            <a href="privacy.html">개인정보처리방침</a>
+            <a href="contact.html">문의</a>
+        </div>
+        <p>본 사이트는 오락 목적으로 제작되었습니다.</p>
+        <p>복권 구매는 동행복권 공식 사이트를 이용해주세요.</p>
+    </footer>
+
+    <script>
+        // ── 난수 (rejection sampling) ──
+        function secureRandom(max) {
+            try {
+                var array = new Uint32Array(1);
+                var limit = 4294967296;
+                var threshold = limit - (limit % max);
+                do { crypto.getRandomValues(array); } while (array[0] >= threshold);
+                return array[0] % max;
+            } catch (e) {
+                return Math.floor(Math.random() * max);
+            }
+        }
+
+        // ── 생성 토큰 ──
+        var generationToken = 0;
+
+        // ── 탭 전환 ──
+        function switchTab(tab) {
+            var tabs = document.querySelectorAll('.tab');
+            var panels = document.querySelectorAll('.panel');
+            tabs.forEach(function(t) {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+                t.setAttribute('tabindex', '-1');
+            });
+            panels.forEach(function(p) { p.setAttribute('hidden', ''); });
+            var idx = tab === 'lotto' ? 0 : 1;
+            tabs[idx].classList.add('active');
+            tabs[idx].setAttribute('aria-selected', 'true');
+            tabs[idx].setAttribute('tabindex', '0');
+            document.getElementById('panel-' + tab).removeAttribute('hidden');
+        }
+
+        document.querySelectorAll('.tab').forEach(function(t) {
+            t.addEventListener('click', function() {
+                switchTab(this.getAttribute('aria-controls').replace('panel-', ''));
+            });
+        });
+
+        document.querySelector('.tabs').addEventListener('keydown', function(e) {
+            if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+            e.preventDefault();
+            var tabs = Array.from(this.querySelectorAll('.tab'));
+            var current = tabs.findIndex(function(t) { return t.classList.contains('active'); });
+            var next = e.key === 'ArrowRight' ? (current + 1) % tabs.length : (current - 1 + tabs.length) % tabs.length;
+            switchTab(next === 0 ? 'lotto' : 'pension');
+            tabs[next].focus();
+        });
+
+        // ── 공통 유틸 ──
+        function getBallClass(num) {
+            if (num <= 10) return 'range-1';
+            if (num <= 20) return 'range-2';
+            if (num <= 30) return 'range-3';
+            if (num <= 40) return 'range-4';
+            return 'range-5';
+        }
+
+        function getTimeStr() {
+            var now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+
+        function createGameWrapper(gameIndex) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'multi-result';
+            var label = document.createElement('div');
+            label.className = 'game-label';
+            label.textContent = String.fromCharCode(65 + gameIndex) + ' 게임';
+            wrapper.appendChild(label);
+            return wrapper;
+        }
+
+        function trimHistory(containerId, maxItems) {
+            var container = document.getElementById(containerId);
+            while (container.children.length > maxItems) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function announce(message) {
+            document.getElementById('sr-status').textContent = message;
+        }
+
+        function updatePriceHint(type) {
+            var count = parseInt(document.getElementById(type + '-count').value);
+            document.getElementById(type + '-price').textContent = '총 ' + (count * 1000).toLocaleString() + '원';
+        }
+
+        // ── 번호 생성 ──
+        function generateLottoNumbers() {
+            var numbers = [];
+            while (numbers.length < 6) {
+                var n = secureRandom(45) + 1;
+                if (numbers.indexOf(n) === -1) numbers.push(n);
+            }
+            numbers.sort(function(a, b) { return a - b; });
+            return numbers;
+        }
+
+        function generatePensionNumbers() {
+            var group = secureRandom(5) + 1;
+            var digits = [];
+            for (var i = 0; i < 6; i++) digits.push(secureRandom(10));
+            return { group: group, digits: digits };
+        }
+
+        // ── 결과 렌더링 ──
+        function renderLottoBalls(container, numbers, token, delayBase) {
+            var ballsDiv = document.createElement('div');
+            ballsDiv.className = 'lotto-balls';
+            numbers.forEach(function(num, i) {
+                var ball = document.createElement('div');
+                ball.className = 'ball ' + getBallClass(num);
+                ball.textContent = num;
+                ballsDiv.appendChild(ball);
+                setTimeout(function() {
+                    if (generationToken === token) ball.classList.add('show');
+                }, 50 * i + delayBase);
+            });
+            container.appendChild(ballsDiv);
+        }
+
+        function renderPensionResult(container, data, token, delayBase) {
+            var resultDiv = document.createElement('div');
+            resultDiv.className = 'pension-result';
+
+            var groupEl = document.createElement('div');
+            groupEl.className = 'pension-group';
+            groupEl.textContent = data.group + '조';
+            resultDiv.appendChild(groupEl);
+            setTimeout(function() {
+                if (generationToken === token) groupEl.classList.add('show');
+            }, delayBase);
+
+            var sepEl = document.createElement('span');
+            sepEl.className = 'pension-separator';
+            sepEl.textContent = '|';
+            resultDiv.appendChild(sepEl);
+            setTimeout(function() {
+                if (generationToken === token) sepEl.classList.add('show');
+            }, 60 + delayBase);
+
+            data.digits.forEach(function(d, i) {
+                var digitEl = document.createElement('div');
+                digitEl.className = 'pension-digit';
+                digitEl.textContent = d;
+                resultDiv.appendChild(digitEl);
+                setTimeout(function() {
+                    if (generationToken === token) digitEl.classList.add('show');
+                }, 100 + 50 * i + delayBase);
+            });
+
+            container.appendChild(resultDiv);
+        }
+
+        // ── 통합 생성 ──
+        function generate(type) {
+            var token = ++generationToken;
+            var count = parseInt(document.getElementById(type + '-count').value);
+            var container = document.getElementById(type + '-results');
+            container.innerHTML = '';
+            var allGames = [];
+            var isLotto = type === 'lotto';
+
+            for (var g = 0; g < count; g++) {
+                var wrapper = createGameWrapper(g);
+                if (isLotto) {
+                    var numbers = generateLottoNumbers();
+                    allGames.push({ numbers: numbers });
+                    renderLottoBalls(wrapper, numbers, token, g * 80);
+                } else {
+                    var data = generatePensionNumbers();
+                    allGames.push(data);
+                    renderPensionResult(wrapper, data, token, g * 80);
+                }
+                container.appendChild(wrapper);
+            }
+
+            saveHistory(type, allGames);
+            announce((isLotto ? '로또' : '연금복권') + ' ' + count + '게임 생성 완료');
+        }
+
+        // ── 통합 히스토리 ──
+        function saveHistory(type, games) {
+            var section = document.getElementById(type + '-history-section');
+            var container = document.getElementById(type + '-history');
+            section.style.display = 'block';
+            var timeStr = getTimeStr();
+            var isLotto = type === 'lotto';
+
+            games.forEach(function(game) {
+                var item = document.createElement('div');
+                item.className = 'history-item';
+
+                var time = document.createElement('span');
+                time.className = 'time';
+                time.textContent = timeStr;
+                item.appendChild(time);
+
+                if (isLotto) {
+                    var balls = document.createElement('div');
+                    balls.className = 'history-balls';
+                    game.numbers.forEach(function(num) {
+                        var b = document.createElement('span');
+                        b.className = 'mini-ball ' + getBallClass(num);
+                        b.textContent = num;
+                        balls.appendChild(b);
+                    });
+                    item.appendChild(balls);
+                } else {
+                    var nums = document.createElement('div');
+                    nums.className = 'history-pension-nums';
+                    var grp = document.createElement('span');
+                    grp.className = 'mini-group';
+                    grp.textContent = game.group + '조';
+                    nums.appendChild(grp);
+                    game.digits.forEach(function(d) {
+                        var digit = document.createElement('span');
+                        digit.className = 'mini-digit';
+                        digit.textContent = d;
+                        nums.appendChild(digit);
+                    });
+                    item.appendChild(nums);
+                }
+
+                container.insertBefore(item, container.firstChild);
+            });
+
+            trimHistory(type + '-history', 20);
+        }
+
+        function clearHistory(type) {
+            document.getElementById(type + '-history').innerHTML = '';
+            document.getElementById(type + '-history-section').style.display = 'none';
+        }
+
+        // ── 최근 당첨번호 (로컬에서는 플레이스홀더, 서버 배포 후 API 연동) ──
+        function renderWinningNumbers() {
+            var lottoContainer = document.getElementById('lotto-winning');
+            var pensionContainer = document.getElementById('pension-winning');
+
+            // 서버 배포 후 API로 교체될 영역
+            // 현재는 안내 메시지 표시
+            lottoContainer.innerHTML = '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">서버 배포 후 최근 당첨번호가 자동으로 표시됩니다.</p></div>';
+            pensionContainer.innerHTML = '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">서버 배포 후 최근 당첨번호가 자동으로 표시됩니다.</p></div>';
+        }
+
+        renderWinningNumbers();
+    </script>
+</body>
+</html>
