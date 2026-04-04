@@ -380,18 +380,88 @@
             document.getElementById(type + '-history-section').style.display = 'none';
         }
 
-        // ── 최근 당첨번호 (로컬에서는 플레이스홀더, 서버 배포 후 API 연동) ──
-        function renderWinningNumbers() {
-            var lottoContainer = document.getElementById('lotto-winning');
-            var pensionContainer = document.getElementById('pension-winning');
+        // ── 최근 당첨번호 로드 ──
+        function loadWinningNumbers() {
+            fetch('data/lotto.json')
+                .then(function(r) { return r.json(); })
+                .then(function(data) { renderLottoWinning(data); })
+                .catch(function() {
+                    document.getElementById('lotto-winning').innerHTML =
+                        '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">당첨번호를 불러올 수 없습니다.</p></div>';
+                });
 
-            // 서버 배포 후 API로 교체될 영역
-            // 현재는 안내 메시지 표시
-            lottoContainer.innerHTML = '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">서버 배포 후 최근 당첨번호가 자동으로 표시됩니다.</p></div>';
-            pensionContainer.innerHTML = '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">서버 배포 후 최근 당첨번호가 자동으로 표시됩니다.</p></div>';
+            fetch('data/pension.json')
+                .then(function(r) { return r.json(); })
+                .then(function(data) { renderPensionWinning(data); })
+                .catch(function() {
+                    document.getElementById('pension-winning').innerHTML =
+                        '<div class="winning-round"><p style="font-size:0.85rem;color:#999;text-align:center;padding:8px 0;">당첨번호를 불러올 수 없습니다.</p></div>';
+                });
         }
 
-        renderWinningNumbers();
+        function renderLottoWinning(rounds) {
+            var container = document.getElementById('lotto-winning');
+            container.innerHTML = '';
+            rounds.forEach(function(r) {
+                var div = document.createElement('div');
+                div.className = 'winning-round';
+
+                var info = document.createElement('div');
+                info.className = 'round-info';
+                info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
+                div.appendChild(info);
+
+                var balls = document.createElement('div');
+                balls.className = 'lotto-balls';
+                r.numbers.forEach(function(num) {
+                    var ball = document.createElement('div');
+                    ball.className = 'ball static ' + getBallClass(num);
+                    ball.textContent = num;
+                    balls.appendChild(ball);
+                });
+                div.appendChild(balls);
+                container.appendChild(div);
+            });
+        }
+
+        function renderPensionWinning(rounds) {
+            var container = document.getElementById('pension-winning');
+            container.innerHTML = '';
+            rounds.forEach(function(r) {
+                var div = document.createElement('div');
+                div.className = 'winning-round';
+
+                var info = document.createElement('div');
+                info.className = 'round-info';
+                info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
+                div.appendChild(info);
+
+                var result = document.createElement('div');
+                result.className = 'pension-result';
+
+                var groupEl = document.createElement('div');
+                groupEl.className = 'pension-group static';
+                groupEl.textContent = r.group + '조';
+                result.appendChild(groupEl);
+
+                var sep = document.createElement('span');
+                sep.className = 'pension-separator static';
+                sep.textContent = '|';
+                result.appendChild(sep);
+
+                r.numbers.forEach(function(d) {
+                    var digit = document.createElement('div');
+                    digit.className = 'pension-digit static';
+                    digit.textContent = d;
+                    result.appendChild(digit);
+                });
+
+                div.appendChild(result);
+                container.appendChild(div);
+            });
+        }
+
+        loadWinningNumbers();
     </script>
 </body>
 </html>
