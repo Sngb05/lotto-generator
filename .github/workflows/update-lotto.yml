@@ -1,0 +1,37 @@
+name: 당첨번호 자동 업데이트
+
+on:
+  schedule:
+    # 토요일 밤 9시 30분 (KST) = 토요일 12:30 UTC — 로또 추첨 후
+    - cron: '30 12 * * 6'
+    # 목요일 밤 7시 30분 (KST) = 목요일 10:30 UTC — 연금복권 추첨 후
+    - cron: '30 10 * * 4'
+  workflow_dispatch: # 수동 실행도 가능
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 당첨번호 수집 스크립트 실행
+        run: node scripts/update-lotto.js
+
+      - name: 변경사항 확인 및 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/lotto.json data/pension.json
+          if git diff --cached --quiet; then
+            echo "변경사항 없음"
+          else
+            git commit -m "당첨번호 자동 업데이트 $(date +%Y-%m-%d)"
+            git push
+          fi
