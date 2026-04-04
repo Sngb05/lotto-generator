@@ -9,6 +9,10 @@
     <meta property="og:description" content="로또 & 연금복권 추첨기에 대한 문의사항을 보내주세요.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.plasmalotto.com/contact.html">
+    <meta property="og:image" content="https://www.plasmalotto.com/og-image.svg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="문의 — 로또 & 연금복권 추첨기">
+    <meta name="twitter:description" content="로또 & 연금복권 추첨기에 대한 문의사항을 보내주세요.">
     <link rel="canonical" href="https://www.plasmalotto.com/contact.html">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9818455528660030" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -45,7 +49,11 @@
 
         <div class="card">
             <h2>문의 양식</h2>
-            <form id="contact-form" onsubmit="handleSubmit(event)">
+            <!-- Formspree 실제 폼 백엔드 (무료, 월 50건) -->
+            <!-- TODO: Formspree 가입 후 action URL의 {form_id}를 교체하세요 -->
+            <form id="contact-form" action="https://formspree.io/f/xwpkpgrl" method="POST">
+                <input type="hidden" name="_subject" value="[로또 추첨기] 새 문의">
+                <input type="hidden" name="_next" value="https://www.plasmalotto.com/contact.html?sent=1">
                 <div class="form-group">
                     <label for="name">이름 (선택)</label>
                     <input type="text" id="name" name="name" placeholder="홍길동">
@@ -83,20 +91,10 @@
     </footer>
 
     <script>
-        function handleSubmit(e) {
-            e.preventDefault();
-            // 서버 배포 후 실제 폼 전송 로직으로 교체
-            // 현재는 mailto 폴백
-            var email = document.getElementById('email').value;
-            var name = document.getElementById('name').value;
-            var message = document.getElementById('message').value;
-
-            var subject = encodeURIComponent('[로또 추첨기] 문의');
-            var body = encodeURIComponent('이름: ' + (name || '미입력') + '\n이메일: ' + email + '\n\n' + message);
-
-            window.location.href = 'mailto:eodeumin556@gmail.com?subject=' + subject + '&body=' + body;
-
-            document.getElementById('form-result').textContent = '이메일 앱이 열립니다. 전송을 완료해주세요.';
+        // 전송 성공 시 메시지 표시
+        if (window.location.search.indexOf('sent=1') !== -1) {
+            document.getElementById('form-result').textContent = '문의가 정상적으로 전송되었습니다. 감사합니다!';
+            document.getElementById('form-result').style.color = '#2D6B2D';
         }
     </script>
 </body>

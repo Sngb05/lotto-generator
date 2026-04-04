@@ -149,9 +149,10 @@ async function main() {
     try {
         var lottoResults = await fetchLottoFromSuperkts();
         if (lottoResults.length > 0) {
+            var lottoData = { lastUpdated: new Date().toISOString(), rounds: lottoResults };
             fs.writeFileSync(
                 path.join(DATA_DIR, 'lotto.json'),
-                JSON.stringify(lottoResults, null, 4) + '\n'
+                JSON.stringify(lottoData, null, 4) + '\n'
             );
             lottoResults.forEach(function(r) {
                 console.log('  로또 ' + r.round + '회 (' + r.date + '): ' + r.numbers.join(', ') + ' + 보너스 ' + r.bonus);
@@ -168,9 +169,10 @@ async function main() {
     try {
         var pensionResults = await fetchPensionFromPyony();
         if (pensionResults.length > 0) {
+            var pensionData = { lastUpdated: new Date().toISOString(), rounds: pensionResults };
             fs.writeFileSync(
                 path.join(DATA_DIR, 'pension.json'),
-                JSON.stringify(pensionResults, null, 4) + '\n'
+                JSON.stringify(pensionData, null, 4) + '\n'
             );
             pensionResults.forEach(function(r) {
                 console.log('  연금복권 ' + r.round + '회 (' + r.date + '): ' + r.group + '조 ' + r.numbers.join(''));
@@ -181,6 +183,22 @@ async function main() {
         }
     } catch (e) {
         console.error('  연금복권 수집 오류:', e.message, '\n');
+    }
+
+    // 파싱 실패 감지
+    var hasFailure = false;
+    try {
+        var lottoCheck = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'lotto.json'), 'utf8'));
+        if (!lottoCheck.rounds || lottoCheck.rounds.length === 0) hasFailure = true;
+    } catch (e) { hasFailure = true; }
+    try {
+        var pensionCheck = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'pension.json'), 'utf8'));
+        if (!pensionCheck.rounds || pensionCheck.rounds.length === 0) hasFailure = true;
+    } catch (e) { hasFailure = true; }
+
+    if (hasFailure) {
+        console.error('\n⚠️  경고: 일부 데이터 수집에 실패했습니다. 소스 사이트 구조가 변경되었을 수 있습니다.');
+        process.exitCode = 1;
     }
 
     console.log('=== 완료 ===');
