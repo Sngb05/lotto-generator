@@ -430,34 +430,43 @@ body {
     min-height: auto;
 }
 
-/* ── 당첨번호 섹션 ── */
+/* ── 당첨번호 섹션 (프리미엄 다크 카드) ── */
 .winning-section {
     margin-bottom: 32px;
 }
 
+.winning-card {
+    background: #1A1A1A;
+    border-radius: 14px;
+    padding: 6px 0;
+    overflow: hidden;
+}
+
 .winning-round {
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 8px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #333;
+}
+
+.winning-round:last-child {
+    border-bottom: none;
 }
 
 .winning-round .round-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .winning-round .round-number {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #1A1A1A;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #D4A843;
 }
 
 .winning-round .round-date {
     font-size: 0.72rem;
-    color: #999;
+    color: #777;
     font-weight: 500;
 }
 
@@ -470,6 +479,22 @@ body {
     width: 38px;
     height: 38px;
     font-size: 0.9rem;
+}
+
+/* 다크 카드 위 연금복권 스타일 오버라이드 */
+.winning-round .pension-group {
+    background: #D4A843;
+    color: #1A1A1A;
+}
+
+.winning-round .pension-digit {
+    background: #333;
+    border-color: #555;
+    color: #fff;
+}
+
+.winning-round .pension-separator {
+    color: #555;
 }
 
 /* ── 히스토리 ── */
@@ -739,6 +764,10 @@ footer a:hover {
     .generate-btn {
         min-height: 50px;
         border-radius: 10px;
+    }
+
+    .winning-round {
+        padding: 14px 16px;
     }
 
     .winning-round .ball {
