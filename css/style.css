@@ -16,6 +16,12 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 0 20px 60px;
+    overflow-x: hidden;
+}
+
+/* 스크롤바로 인한 중앙 정렬 오차 보정 */
+html {
+    overflow-y: scroll;
 }
 
 /* ── 스크린리더 전용 ── */
