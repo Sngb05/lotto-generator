@@ -19,6 +19,20 @@ function fetch(url) {
     });
 }
 
+// ── 금액을 한글로 변환 ──
+function formatKoreanMoney(amount) {
+    if (amount >= 100000000) {
+        var eok = Math.floor(amount / 100000000);
+        var man = Math.floor((amount % 100000000) / 10000);
+        if (man > 0) return eok + '억 ' + man + '만원';
+        return eok + '억원';
+    } else if (amount >= 10000) {
+        var man = Math.floor(amount / 10000);
+        return man + '만원';
+    }
+    return amount.toLocaleString() + '원';
+}
+
 // ── superkts.com에서 로또 당첨번호 파싱 ──
 async function fetchLottoFromSuperkts() {
     console.log('superkts.com에서 로또 데이터 수집 중...');
@@ -44,35 +58,34 @@ async function fetchLottoFromSuperkts() {
         rounds.push({ round: round, date: dateStr, numbers: numbers, bonus: bonus });
     }
 
-    // 각 회차별 상세 페이지에서 1등/2등 당첨금 가져오기
+    // 각 회차별 당첨금 가져오기 (pyony.com 상세 페이지)
     for (var i = 0; i < rounds.length; i++) {
         try {
-            var detailHtml = await fetch('https://superkts.com/lotto/' + rounds[i].round);
+            var detailHtml = await fetch('https://pyony.com/lotto/rounds/' + rounds[i].round + '/');
 
-            // 1등 당첨금 (한글 표기)
-            var prizes = detailHtml.match(/게임당 : <b>(\d+억[\s\d만]*원)/g);
-            if (prizes && prizes.length >= 1) {
-                var p1 = prizes[0].match(/게임당 : <b>(.+)/);
-                if (p1) rounds[i].prize = p1[1].replace(/\s+/g, ' ').trim();
+            // 1등~3등 당첨금 + 당첨자 수 추출
+            // pyony 테이블 구조: <th>N등</th> <td>당첨자수</td> <td><a>금액</a> 원</td>
+            var prizeRegex = /<th[^>]*>(\d)등<\/th>\s*<td[^>]*>([\d,]+)<\/td>\s*<td[^>]*><a[^>]*>([\d,]+)<\/a>\s*원<\/td>/g;
+            var pm;
+            while ((pm = prizeRegex.exec(detailHtml)) !== null) {
+                var rank = parseInt(pm[1]);
+                var winners = parseInt(pm[2].replace(/,/g, ''));
+                var amount = parseInt(pm[3].replace(/,/g, ''));
+
+                // 한글 금액 변환
+                var amountStr = formatKoreanMoney(amount);
+
+                if (rank === 1) {
+                    rounds[i].prize = amountStr;
+                    rounds[i].winners = winners;
+                } else if (rank === 2) {
+                    rounds[i].prize2 = amountStr;
+                    rounds[i].winners2 = winners;
+                } else if (rank === 3) {
+                    rounds[i].prize3 = amountStr;
+                    rounds[i].winners3 = winners;
+                }
             }
-
-            // 2등 당첨금 (한글 표기)
-            if (prizes && prizes.length >= 2) {
-                var p2 = prizes[1].match(/게임당 : <b>(.+)/);
-                if (p2) rounds[i].prize2 = p2[1].replace(/\s+/g, ' ').trim();
-            } else {
-                // 2등이 억 단위가 아닌 경우 (만원 단위)
-                var prize2Alt = detailHtml.match(/2등 당첨금[\s\S]*?게임당 : <b>(\d+만[\s\d]*원)/);
-                if (prize2Alt) rounds[i].prize2 = prize2Alt[1].replace(/\s+/g, ' ').trim();
-            }
-
-            // 1등 당첨자 수
-            var winnersMatch = detailHtml.match(/1등[\s\S]*?당첨 게임수 : <b>(\d+)/);
-            if (winnersMatch) rounds[i].winners = parseInt(winnersMatch[1]);
-
-            // 2등 당첨자 수
-            var winners2Match = detailHtml.match(/2등[\s\S]*?당첨 게임수 : <b>(\d+)/);
-            if (winners2Match) rounds[i].winners2 = parseInt(winners2Match[1]);
         } catch (e) {
             console.error('  ' + rounds[i].round + '회 당첨금 조회 실패');
         }
