@@ -455,18 +455,24 @@
                 info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
                 div.appendChild(info);
 
-                var pensionPrize = document.createElement('div');
-                pensionPrize.className = 'pension-prize';
-                pensionPrize.innerHTML = ''
-                    + '1등 조+6자리 일치 — 월 700만원×20년<br>'
-                    + '2등 6자리 일치 — 월 100만원×10년<br>'
-                    + '3등 앞/뒤 5자리 일치 — 100만원<br>'
-                    + '4등 앞/뒤 4자리 일치 — 10만원<br>'
-                    + '5등 앞/뒤 3자리 일치 — 5만원<br>'
-                    + '6등 앞/뒤 2자리 일치 — 5천원<br>'
-                    + '7등 앞/뒤 1자리 일치 — 1천원<br>'
-                    + '보너스 각 조 6자리 일치 — 월 100만원×10년';
-                div.appendChild(pensionPrize);
+                // 첫 번째 회차에만 당첨금 테이블 표시
+                if (i === 0) {
+                    var table = document.createElement('table');
+                    table.className = 'pension-prize-table';
+                    table.innerHTML = ''
+                        + '<thead><tr><th>등수</th><th>조건</th><th>당첨금</th></tr></thead>'
+                        + '<tbody>'
+                        + '<tr class="highlight"><td class="rank">1등</td><td class="condition">조 + 6자리 일치</td><td class="amount">월 700만원×20년</td></tr>'
+                        + '<tr><td class="rank">2등</td><td class="condition">6자리 일치</td><td class="amount">월 100만원×10년</td></tr>'
+                        + '<tr><td class="rank">3등</td><td class="condition">앞/뒤 5자리 일치</td><td class="amount">100만원</td></tr>'
+                        + '<tr><td class="rank">4등</td><td class="condition">앞/뒤 4자리 일치</td><td class="amount">10만원</td></tr>'
+                        + '<tr><td class="rank">5등</td><td class="condition">앞/뒤 3자리 일치</td><td class="amount">5만원</td></tr>'
+                        + '<tr><td class="rank">6등</td><td class="condition">앞/뒤 2자리 일치</td><td class="amount">5천원</td></tr>'
+                        + '<tr><td class="rank">7등</td><td class="condition">앞/뒤 1자리 일치</td><td class="amount">1천원</td></tr>'
+                        + '<tr class="bonus-row"><td class="rank">보너스</td><td class="condition">각 조 6자리 일치</td><td class="amount">월 100만원×10년</td></tr>'
+                        + '</tbody>';
+                    div.appendChild(table);
+                }
 
                 var result = document.createElement('div');
                 result.className = 'pension-result';
