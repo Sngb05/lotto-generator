@@ -446,7 +446,7 @@
             container.innerHTML = '';
             var card = document.createElement('div');
             card.className = 'winning-card';
-            rounds.forEach(function(r) {
+            rounds.forEach(function(r, idx) {
                 var div = document.createElement('div');
                 div.className = 'winning-round';
 
@@ -456,7 +456,7 @@
                 div.appendChild(info);
 
                 // 첫 번째 회차에만 당첨금 테이블 표시
-                if (i === 0) {
+                if (idx === 0) {
                     var table = document.createElement('table');
                     table.className = 'pension-prize-table';
                     table.innerHTML = ''
