@@ -6,17 +6,17 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="favicon.svg">
     <title>로또번호 생성기 — 연금복권 720+ 무료</title>
-    <meta name="description" content="로또 6/45와 연금복권 720+ 번호를 무료로 랜덤 생성. 최근 당첨번호와 등수별 당첨금을 한눈에 확인할 수 있습니다.">
-    <meta name="keywords" content="로또번호, 로또 번호 생성기, 로또번호 뽑기, 로또 랜덤, 로또 추첨, 로또 당첨번호, 연금복권, 연금복권 번호 생성, 번호 추출기, 무료 로또">
+    <meta name="description" content="로또 6/45와 연금복권 720+ 등 한국 복권 번호를 무료로 랜덤 생성. 최근 당첨번호와 등수별 당첨금을 한눈에 확인할 수 있습니다.">
+    <meta name="keywords" content="로또번호, 로또 번호 생성기, 로또번호 뽑기, 로또 랜덤, 로또 추첨, 로또 당첨번호, 연금복권, 연금복권 번호 생성, 번호 추출기, 무료 로또, 복권, 복권 번호 생성기, 온라인 복권, 복권 추첨, 복권 당첨번호">
     <meta name="google-site-verification" content="hTPphb6K1aQbl8k8QE-RH8GYcQVCY8FUF3v78Oo6tg0">
     <meta property="og:title" content="로또번호 생성기 — 연금복권 720+ 무료">
-    <meta property="og:description" content="로또 6/45와 연금복권 720+ 번호를 무료로 랜덤 생성. 최근 당첨번호와 등수별 당첨금까지.">
+    <meta property="og:description" content="로또 6/45와 연금복권 720+ 등 한국 복권 번호를 무료로 랜덤 생성. 최근 당첨번호와 등수별 당첨금까지.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.plasmalotto.com/">
     <meta property="og:image" content="https://www.plasmalotto.com/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="로또번호 생성기 — 연금복권 720+ 무료">
-    <meta name="twitter:description" content="로또 6/45와 연금복권 720+ 번호를 무료로 랜덤 생성.">
+    <meta name="twitter:description" content="로또 6/45와 연금복권 720+ 등 한국 복권 번호를 무료로 랜덤 생성.">
     <link rel="canonical" href="https://www.plasmalotto.com/">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9818455528660030" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -298,7 +298,8 @@
         "@type": "WebApplication",
         "name": "로또번호 생성기",
         "url": "https://www.plasmalotto.com",
-        "description": "로또 6/45와 연금복권 720+ 번호를 무료로 랜덤 생성하는 웹 도구. 암호학적 난수 생성기 기반.",
+        "description": "로또 6/45와 연금복권 720+ 등 한국 복권 번호를 무료로 랜덤 생성하는 웹 도구. 암호학적 난수 생성기 기반.",
+        "keywords": "로또, 로또번호, 로또 번호 생성기, 연금복권, 복권, 복권 번호 생성기, 온라인 복권, 복권 추첨",
         "applicationCategory": "UtilityApplication",
         "operatingSystem": "Any",
         "browserRequirements": "Requires JavaScript",
@@ -635,16 +636,64 @@
         }
 
         // ── 통합 생성 ──
+        // ── 균형 게임 분석 ──
+        // 로또 번호 6개를 5구간(range-1~5)에 매핑했을 때
+        // 가장 많은 구간이 등장하고, 분포가 가장 균등한 게임 1개를 선택.
+        // 당첨 확률과는 무관한 시각적 정보 라벨.
+        function findBalancedGame(games) {
+            var ranges = ['range-1','range-2','range-3','range-4','range-5'];
+            var bestIdx = -1;
+            var bestColors = -1;
+            var bestVariance = Infinity;
+
+            games.forEach(function(game, idx) {
+                var colorSet = {};
+                game.numbers.forEach(function(n) {
+                    var cls = getBallClass(n);
+                    colorSet[cls] = (colorSet[cls] || 0) + 1;
+                });
+                var colorCount = Object.keys(colorSet).length;
+
+                // 분포 균등도 분산 (6개를 5구간 균등 분배 시 평균 1.2)
+                var variance = 0;
+                ranges.forEach(function(r) {
+                    var c = colorSet[r] || 0;
+                    variance += (c - 1.2) * (c - 1.2);
+                });
+                variance /= 5;
+
+                if (colorCount > bestColors ||
+                    (colorCount === bestColors && variance < bestVariance)) {
+                    bestColors = colorCount;
+                    bestVariance = variance;
+                    bestIdx = idx;
+                }
+            });
+
+            return { idx: bestIdx, colors: bestColors };
+        }
+
+        function addBalanceBadge(wrapper, colors) {
+            var label = wrapper.querySelector('.game-label');
+            if (!label) return;
+            var badge = document.createElement('span');
+            badge.className = 'balance-badge';
+            badge.textContent = colors + '구간 균형 분포';
+            label.appendChild(badge);
+        }
+
         function generate(type) {
             var token = ++generationToken;
             var count = parseInt(document.getElementById(type + '-count').value);
             var container = document.getElementById(type + '-results');
             container.innerHTML = '';
             var allGames = [];
+            var wrappers = [];
             var isLotto = type === 'lotto';
 
             for (var g = 0; g < count; g++) {
                 var wrapper = createGameWrapper(g);
+                wrappers.push(wrapper);
                 if (isLotto) {
                     var numbers = generateLottoNumbers();
                     allGames.push({ numbers: numbers });
@@ -655,6 +704,14 @@
                     renderPensionResult(wrapper, data, token, g * 80);
                 }
                 container.appendChild(wrapper);
+            }
+
+            // 로또 + 2게임 이상일 때만 균형 게임 라벨
+            if (isLotto && count >= 2) {
+                var balanced = findBalancedGame(allGames);
+                if (balanced.idx >= 0 && balanced.colors >= 4) {
+                    addBalanceBadge(wrappers[balanced.idx], balanced.colors);
+                }
             }
 
             saveHistory(type, allGames);

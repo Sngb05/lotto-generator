@@ -444,6 +444,21 @@ body > * {
     text-transform: uppercase;
 }
 
+.balance-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    background: #E8F2E8;
+    color: #2D6B2D;
+    font-size: 0.68rem;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 1px solid #C4DFC4;
+    vertical-align: middle;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
 .multi-result .lotto-balls,
 .multi-result .pension-result {
     min-height: auto;
