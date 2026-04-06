@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <title>로또 6/45 회차별 당첨번호 — 1회부터 최신 회차까지</title>
+    <meta name="description" content="로또 6/45 1회부터 최신 회차까지 전체 당첨번호와 보너스번호를 한눈에. 회차 번호로 검색할 수 있으며 매주 자동 갱신됩니다.">
+    <meta name="keywords" content="로또 회차별 당첨번호, 로또 역대 당첨번호, 로또 1회 당첨번호, 로또 보너스번호, 로또 회차 검색, 동행복권 회차">
+    <meta property="og:title" content="로또 6/45 회차별 당첨번호 — 1회부터 최신 회차까지">
+    <meta property="og:description" content="로또 6/45 전체 회차의 당첨번호와 보너스번호를 한눈에. 회차 번호로 검색 가능.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.plasmalotto.com/winning-history.html">
+    <meta property="og:image" content="https://www.plasmalotto.com/og-image.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="로또 6/45 회차별 당첨번호 — 1회부터 최신 회차까지">
+    <meta name="twitter:description" content="로또 6/45 전체 회차의 당첨번호와 보너스번호를 한눈에.">
+    <link rel="canonical" href="https://www.plasmalotto.com/winning-history.html">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9818455528660030" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="top-header">
+        <span>로또 & 연금복권 추첨기</span>
+        <span>Winning History</span>
+        <span>2026</span>
+    </div>
+    <div class="header-line"></div>
+
+    <nav class="nav">
+        <a href="index.html">번호 생성</a>
+        <a href="about.html">소개</a>
+        <a href="privacy.html">개인정보처리방침</a>
+        <a href="contact.html">문의</a>
+    </nav>
+
+    <h1 class="site-title">회차별 당첨번호</h1>
+
+    <div class="page-content">
+        <div class="card">
+            <p>로또 6/45가 처음 도입된 2002년 12월 7일 1회차부터 최신 회차까지의 전체 당첨번호와 보너스번호를 확인할 수 있습니다. 매주 토요일 추첨 직후 자동 갱신됩니다. 데이터 출처: 동행복권 공식 회차 정보 (superkts.com 경유 수집).</p>
+        </div>
+
+        <div class="card">
+            <h2>회차 검색</h2>
+            <div class="history-search">
+                <input type="number" id="round-search" placeholder="회차 번호 입력 (예: 1218)" min="1" max="9999">
+                <button onclick="searchRound()">이동</button>
+                <button class="secondary" onclick="resetView()">처음으로</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>회차별 당첨번호</h2>
+            <div class="history-info" id="history-info">불러오는 중...</div>
+            <div id="history-list"></div>
+            <div class="history-pagination" id="history-pagination"></div>
+        </div>
+
+        <div class="card">
+            <h2>안내</h2>
+            <p>본 페이지는 로또 6/45의 회차별 당첨번호 정보 제공을 목적으로 합니다. 1등 당첨금과 등수별 당첨자 수 등 상세 정보는 메인 페이지의 최근 당첨번호 섹션에서 확인할 수 있습니다.</p>
+            <p>당첨번호 정보는 매주 토요일 오후 9시 30분경(추첨 직후) GitHub Actions를 통해 자동 수집·갱신됩니다.</p>
+            <p><a href="index.html">메인 페이지에서 번호 생성기 이용하기</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">번호 생성</a>
+            <a href="about.html">소개</a>
+            <a href="lottery-types.html">복권 종류</a>
+            <a href="privacy.html">개인정보처리방침</a>
+            <a href="contact.html">문의</a>
+        </div>
+        <p>본 사이트는 복권 번호 생성 서비스를 제공합니다.</p>
+        <p>복권 구매는 동행복권 공식 사이트를 이용해주세요.</p>
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "로또 6/45 회차별 당첨번호",
+        "url": "https://www.plasmalotto.com/winning-history.html",
+        "description": "로또 6/45 1회부터 최신 회차까지 전체 당첨번호와 보너스번호. 회차 번호로 검색 가능.",
+        "inLanguage": "ko",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "plasmalotto",
+            "url": "https://www.plasmalotto.com"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "plasmalotto",
+            "url": "https://www.plasmalotto.com"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "홈",
+                "item": "https://www.plasmalotto.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "회차별 당첨번호",
+                "item": "https://www.plasmalotto.com/winning-history.html"
+            }
+        ]
+    }
+    </script>
+
+    <script>
+        // ── 회차별 당첨번호 페이지 로직 ──
+        var allRounds = [];
+        var currentPage = 1;
+        var PER_PAGE = 50;
+
+        function getBallClass(num) {
+            if (num <= 10) return 'range-1';
+            if (num <= 20) return 'range-2';
+            if (num <= 30) return 'range-3';
+            if (num <= 40) return 'range-4';
+            return 'range-5';
+        }
+
+        function loadHistory() {
+            fetch('data/lotto-history.json')
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    allRounds = data.rounds || [];
+                    document.getElementById('history-info').textContent =
+                        '총 ' + allRounds.length + '개 회차 (1회 ~ ' + allRounds[0].round + '회)';
+                    renderPage(1);
+                })
+                .catch(function() {
+                    document.getElementById('history-info').textContent = '';
+                    document.getElementById('history-list').innerHTML =
+                        '<p style="color:#999;text-align:center;padding:24px 0;font-size:0.85rem;">당첨번호 데이터를 불러올 수 없습니다.</p>';
+                });
+        }
+
+        function renderPage(page) {
+            currentPage = page;
+            var totalPages = Math.ceil(allRounds.length / PER_PAGE);
+            if (page < 1) currentPage = 1;
+            if (page > totalPages) currentPage = totalPages;
+
+            var start = (currentPage - 1) * PER_PAGE;
+            var end = Math.min(start + PER_PAGE, allRounds.length);
+            var pageRounds = allRounds.slice(start, end);
+
+            var list = document.getElementById('history-list');
+            list.innerHTML = '';
+
+            pageRounds.forEach(function(r) {
+                var card = document.createElement('div');
+                card.className = 'history-round';
+                card.id = 'round-' + r.round;
+
+                var info = document.createElement('div');
+                info.className = 'round-info';
+                info.innerHTML = '<span class="round-number">' + r.round + '회</span><span class="round-date">' + r.date + '</span>';
+                card.appendChild(info);
+
+                var balls = document.createElement('div');
+                balls.className = 'lotto-balls';
+                r.numbers.forEach(function(num) {
+                    var ball = document.createElement('div');
+                    ball.className = 'ball static ' + getBallClass(num);
+                    ball.textContent = num;
+                    balls.appendChild(ball);
+                });
+
+                if (typeof r.bonus === 'number') {
+                    var sep = document.createElement('span');
+                    sep.className = 'bonus-sep';
+                    sep.textContent = '+';
+                    balls.appendChild(sep);
+                    var bonusBall = document.createElement('div');
+                    bonusBall.className = 'ball static ' + getBallClass(r.bonus);
+                    bonusBall.textContent = r.bonus;
+                    balls.appendChild(bonusBall);
+                }
+
+                card.appendChild(balls);
+                list.appendChild(card);
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            var totalPages = Math.ceil(allRounds.length / PER_PAGE);
+            var nav = document.getElementById('history-pagination');
+            nav.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            // 이전
+            if (currentPage > 1) {
+                var prev = document.createElement('button');
+                prev.textContent = '‹ 이전';
+                prev.onclick = function() { renderPage(currentPage - 1); scrollToList(); };
+                nav.appendChild(prev);
+            }
+
+            // 페이지 번호 (현재 ± 2)
+            var startPage = Math.max(1, currentPage - 2);
+            var endPage = Math.min(totalPages, currentPage + 2);
+
+            if (startPage > 1) {
+                addPageBtn(nav, 1);
+                if (startPage > 2) addEllipsis(nav);
+            }
+
+            for (var p = startPage; p <= endPage; p++) {
+                addPageBtn(nav, p);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) addEllipsis(nav);
+                addPageBtn(nav, totalPages);
+            }
+
+            // 다음
+            if (currentPage < totalPages) {
+                var next = document.createElement('button');
+                next.textContent = '다음 ›';
+                next.onclick = function() { renderPage(currentPage + 1); scrollToList(); };
+                nav.appendChild(next);
+            }
+
+            // 페이지 정보
+            var info = document.createElement('span');
+            info.className = 'page-info';
+            info.textContent = currentPage + ' / ' + totalPages;
+            nav.appendChild(info);
+        }
+
+        function addPageBtn(nav, page) {
+            var btn = document.createElement('button');
+            btn.textContent = page;
+            if (page === currentPage) btn.className = 'active';
+            btn.onclick = function() { renderPage(page); scrollToList(); };
+            nav.appendChild(btn);
+        }
+
+        function addEllipsis(nav) {
+            var dots = document.createElement('span');
+            dots.className = 'ellipsis';
+            dots.textContent = '…';
+            nav.appendChild(dots);
+        }
+
+        function scrollToList() {
+            var list = document.getElementById('history-list');
+            if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function searchRound() {
+            var input = document.getElementById('round-search');
+            var roundNum = parseInt(input.value);
+            if (!roundNum || isNaN(roundNum)) return;
+
+            var idx = -1;
+            for (var i = 0; i < allRounds.length; i++) {
+                if (allRounds[i].round === roundNum) { idx = i; break; }
+            }
+
+            if (idx === -1) {
+                alert(roundNum + '회 데이터가 없습니다. 1회 ~ ' + allRounds[0].round + '회 범위에서 검색해주세요.');
+                return;
+            }
+
+            var page = Math.floor(idx / PER_PAGE) + 1;
+            renderPage(page);
+
+            // 해당 회차로 스크롤 + 강조
+            setTimeout(function() {
+                var el = document.getElementById('round-' + roundNum);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    el.classList.add('highlight');
+                    setTimeout(function() { el.classList.remove('highlight'); }, 2500);
+                }
+            }, 100);
+        }
+
+        function resetView() {
+            document.getElementById('round-search').value = '';
+            renderPage(1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 엔터 키로 검색
+        document.getElementById('round-search').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchRound();
+            }
+        });
+
+        loadHistory();
+    </script>
+</body>
+</html>

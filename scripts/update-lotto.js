@@ -141,6 +141,56 @@ async function fetchPensionFromPyony() {
     return results;
 }
 
+// ── lotto-history.json 누적 갱신 ──
+// 새로 수집된 회차 중 history에 없는 것만 추가
+// 첫 실행 전에는 fetch-history.js로 history.json을 먼저 생성해야 함
+function updateHistory(newRounds) {
+    var historyPath = path.join(DATA_DIR, 'lotto-history.json');
+
+    if (!fs.existsSync(historyPath)) {
+        console.log('  ⚠ lotto-history.json 없음. fetch-history.js를 먼저 실행하세요.');
+        return;
+    }
+
+    try {
+        var history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+        var historyRounds = history.rounds || [];
+
+        var existing = {};
+        historyRounds.forEach(function(r) { existing[r.round] = true; });
+
+        var addedCount = 0;
+        newRounds.forEach(function(r) {
+            if (!existing[r.round]) {
+                historyRounds.push({
+                    round: r.round,
+                    numbers: r.numbers,
+                    bonus: r.bonus,
+                    date: r.date
+                });
+                addedCount++;
+            }
+        });
+
+        if (addedCount === 0) {
+            console.log('  → lotto-history.json: 새 회차 없음 (중복 스킵)');
+            return;
+        }
+
+        // 회차 번호 내림차순 (최신 앞)
+        historyRounds.sort(function(a, b) { return b.round - a.round; });
+
+        history.rounds = historyRounds;
+        history.totalRounds = historyRounds.length;
+        history.lastUpdated = new Date().toISOString();
+
+        fs.writeFileSync(historyPath, JSON.stringify(history, null, 2) + '\n');
+        console.log('  → lotto-history.json: ' + addedCount + '개 신규 추가 (총 ' + historyRounds.length + '개)');
+    } catch (e) {
+        console.error('  → lotto-history.json 갱신 오류:', e.message);
+    }
+}
+
 // ── 메인 ──
 async function main() {
     console.log('=== 당첨번호 자동 업데이트 시작 ===\n');
@@ -157,7 +207,11 @@ async function main() {
             lottoResults.forEach(function(r) {
                 console.log('  로또 ' + r.round + '회 (' + r.date + '): ' + r.numbers.join(', ') + ' + 보너스 ' + r.bonus);
             });
-            console.log('  → lotto.json 업데이트 완료\n');
+            console.log('  → lotto.json 업데이트 완료');
+
+            // history 누적 갱신 (새 회차만 추가)
+            updateHistory(lottoResults);
+            console.log();
         } else {
             console.log('  로또 파싱 실패, 기존 데이터 유지\n');
         }
